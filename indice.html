@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ADNEKO | Índice de sitios</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Unbounded:wght@400;600;700;800;900&family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-void:#05060f;
+    --bg-deep:#0a0e2a;
+    --white:#f4f6ff;
+    --muted:#9aa3c7;
+    --line:rgba(180,190,255,0.14);
+    --ff-display:'Unbounded', sans-serif;
+    --ff-body:'Inter', sans-serif;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    background:var(--bg-void); color:var(--white); font-family:var(--ff-body);
+    min-height:100svh; display:flex; flex-direction:column;
+    overflow-x:hidden;
+  }
+  a{color:inherit; text-decoration:none;}
+  a:focus-visible{ outline:2px solid #5b8dff; outline-offset:4px; border-radius:8px; }
+
+  .grid-overlay{
+    position:fixed; inset:0; z-index:0; pointer-events:none;
+    background-image:linear-gradient(var(--line) 1px, transparent 1px), linear-gradient(90deg, var(--line) 1px, transparent 1px);
+    background-size:64px 64px;
+    mask-image:radial-gradient(ellipse 80% 60% at 50% 10%, #000 40%, transparent 90%);
+    opacity:0.5;
+  }
+  body::before{
+    content:''; position:fixed; inset:0; z-index:0;
+    background:
+      radial-gradient(ellipse 55% 45% at 12% 8%, rgba(124,58,237,0.25), transparent 60%),
+      radial-gradient(ellipse 50% 40% at 90% 85%, rgba(59,91,255,0.2), transparent 60%);
+  }
+
+  header{
+    position:relative; z-index:1; text-align:center;
+    padding:clamp(70px,10vw,110px) 24px clamp(50px,7vw,70px);
+  }
+  .eyebrow{
+    display:inline-flex; align-items:center; gap:10px; font-size:12px; font-weight:600;
+    letter-spacing:0.22em; text-transform:uppercase; color:var(--muted); margin-bottom:22px;
+  }
+  .eyebrow .dot{ width:7px; height:7px; border-radius:50%; background:#b46bff; box-shadow:0 0 12px #b46bff; }
+  header h1{
+    font-family:var(--ff-display); font-weight:800; font-size:clamp(2rem,5vw,3.4rem); line-height:1.08;
+    background:linear-gradient(100deg,#fff, #cfd6ff 55%, #b46bff);
+    -webkit-background-clip:text; background-clip:text; color:transparent;
+  }
+  header p{ margin-top:16px; color:var(--muted); font-size:clamp(0.95rem,1.4vw,1.1rem); max-width:50ch; margin-left:auto; margin-right:auto; }
+
+  main{
+    position:relative; z-index:1; flex:1;
+    padding:0 clamp(20px,6vw,80px) 90px;
+    display:grid; grid-template-columns:repeat(auto-fit, minmax(280px,1fr));
+    gap:22px; max-width:1300px; margin:0 auto; width:100%;
+  }
+
+  .site-card{
+    position:relative; border-radius:20px; padding:34px 30px; min-height:230px;
+    border:1px solid var(--line); overflow:hidden;
+    background:linear-gradient(160deg, rgba(255,255,255,0.035), rgba(255,255,255,0.01));
+    display:flex; flex-direction:column; justify-content:flex-end;
+    transition:transform .3s ease, border-color .3s ease, background .3s ease;
+  }
+  .site-card:hover{ transform:translateY(-5px); }
+  .site-card .mono{
+    position:absolute; right:0px; top:-26px; font-family:var(--ff-display); font-weight:800;
+    font-size:clamp(5.5rem,11vw,8rem); line-height:1; pointer-events:none; opacity:0.06;
+    transition:transform .4s ease;
+  }
+  .site-card:hover .mono{ transform:translateY(-6px); }
+  .site-card .tag{ font-size:11px; letter-spacing:0.16em; text-transform:uppercase; font-weight:700; margin-bottom:12px; }
+  .site-card h2{ font-family:var(--ff-display); font-weight:700; font-size:clamp(1.2rem,2vw,1.45rem); margin-bottom:10px; line-height:1.15; }
+  .site-card p{ color:var(--muted); font-size:0.92rem; margin-bottom:22px; max-width:36ch; }
+
+  .card-links{ display:flex; flex-direction:column; gap:9px; }
+  .link-btn{
+    display:inline-flex; align-items:center; justify-content:space-between; gap:10px;
+    width:fit-content; font-weight:700; font-size:12.5px; letter-spacing:0.03em;
+    padding-bottom:2px; border-bottom:1px solid rgba(255,255,255,0.25);
+    transition:border-color .3s ease, color .3s ease, gap .3s ease;
+  }
+  .link-btn .arrow{ transition:transform .3s ease; }
+  .link-btn:hover{ gap:14px; }
+  .link-btn:hover .arrow{ transform:translateX(5px); }
+  .link-btn.primary{ color:var(--white); font-size:13.5px; }
+  .link-btn.secondary{ color:var(--muted); font-weight:600; border-bottom-style:dashed; }
+  .site-card:hover .link-btn{ border-color:var(--accent); }
+  .site-card:hover .link-btn.secondary{ color:var(--white); }
+
+  /* per-card accents */
+  .c-main{ --accent:#b46bff; --accent2:#5b8dff; }
+  .c-bookingos{ --accent:#fbbf24; --accent2:#34d399; }
+  .c-appos{ --accent:#e879f9; --accent2:#38bdf8; }
+  .c-booking{ --accent:#f472b6; --accent2:#fb923c; }
+  .c-ecosistemas{ --accent:#2dd4bf; --accent2:#6366f1; }
+  .c-ekocrsur{ --accent:#a3e635; --accent2:#16a34a; }
+  .c-visual{ --accent:#c084fc; --accent2:#f472b6; }
+  .c-industrial{ --accent:#60a5fa; --accent2:#f97316; }
+  .c-magazine{ --accent:#fb7185; --accent2:#eab308; }
+  .c-adka{ --accent:#818cf8; --accent2:#2dd4bf; }
+
+  .site-card .tag{ color:var(--accent); }
+  .site-card .mono{ color:var(--accent); }
+  .site-card:hover{ border-color:var(--accent); background:linear-gradient(160deg, color-mix(in srgb, var(--accent) 16%, transparent), color-mix(in srgb, var(--accent2) 8%, transparent)); }
+
+  footer{
+    position:relative; z-index:1; padding:26px clamp(20px,6vw,80px);
+    border-top:1px solid var(--line); text-align:center; color:var(--muted); font-size:12.5px;
+  }
+</style>
+</head>
+<body>
+
+<div class="grid-overlay"></div>
+
+<header>
+  <p class="eyebrow"><span class="dot"></span>ADNEKO · Costa Rica</p>
+  <h1>Índice de sitios</h1>
+  <p>Acceso rápido a todos los sitios y productos del ecosistema ADNEKO.</p>
+</header>
+
+<main>
+  <div class="site-card c-main">
+    <span class="mono">A</span>
+    <span class="tag">Sitio principal</span>
+    <h2>ADNEKO</h2>
+    <p>Innovación que se convierte en capacidad.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://adnekoinnovation.adneko.com/" target="_blank" rel="noopener">LANDING <span class="arrow">→</span></a>
+      <a class="link-btn secondary" href="https://adneko.com" target="_blank" rel="noopener">ADNEKO.COM <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="site-card c-bookingos">
+    <span class="mono">S</span>
+    <span class="tag">Producto</span>
+    <h2>ADNEKO Booking OS</h2>
+    <p>App como Servicio.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://bookingos.adneko.com/" target="_blank" rel="noopener">LANDING <span class="arrow">→</span></a>
+      <a class="link-btn secondary" href="https://bookingosapp.adneko.com/" target="_blank" rel="noopener">IR A LA APP <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="site-card c-appos">
+    <span class="mono">O</span>
+    <span class="tag">Producto</span>
+    <h2>ADNEKO AppOS</h2>
+    <p>Su negocio, su App.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://apposbcg.adneko.com/" target="_blank" rel="noopener">LANDING <span class="arrow">→</span></a>
+      <a class="link-btn secondary" href="https://appos.adneko.com/" target="_blank" rel="noopener">IR A LA APP <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="site-card c-booking">
+    <span class="mono">B</span>
+    <span class="tag">Producto</span>
+    <h2>ADNEKO Booking</h2>
+    <p>Reservas para negocios.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://webooking.adneko.com/" target="_blank" rel="noopener">LANDING <span class="arrow">→</span></a>
+      <a class="link-btn secondary" href="https://sistemareservas.adneko.com" target="_blank" rel="noopener">DEMO BASE <span class="arrow">→</span></a>
+      <a class="link-btn secondary" href="https://sistemareservaspro.adneko.com/" target="_blank" rel="noopener">DEMO PRO <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="site-card c-ecosistemas">
+    <span class="mono">E</span>
+    <span class="tag">Showroom</span>
+    <h2>Ecosistemas Territoriales Digitales</h2>
+    <p>IA-NATIVO®.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://ecosistemas.adneko.com/" target="_blank" rel="noopener">ENTRAR <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="site-card c-ekocrsur">
+    <span class="mono">K</span>
+    <span class="tag">Ecosistema regional</span>
+    <h2>EKOCR-SUR</h2>
+    <p>El Sur de Costa Rica, conectado.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://ekocrsurlaunch.adneko.com/" target="_blank" rel="noopener">LANDING <span class="arrow">→</span></a>
+      <a class="link-btn secondary" href="https://ekocr-sur.com" target="_blank" rel="noopener">SITIO EKOCR-SUR <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="site-card c-visual">
+    <span class="mono">V</span>
+    <span class="tag">Producto</span>
+    <h2>ADNEKO Visual Systems</h2>
+    <p>Tecnologías visuales de nueva generación.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://visualsystems.adneko.com/" target="_blank" rel="noopener">LANDING <span class="arrow">→</span></a>
+      <a class="link-btn secondary" href="https://visuals.adneko.com/" target="_blank" rel="noopener">SITIO VISUAL SYSTEMS <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="site-card c-industrial">
+    <span class="mono">I</span>
+    <span class="tag">Producto</span>
+    <h2>ADNEKO Industrial Systems</h2>
+    <p>Edge Computing e Inteligencia para Entornos Reales.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://industrialsystems.adneko.com/" target="_blank" rel="noopener">LANDING <span class="arrow">→</span></a>
+      <a class="link-btn secondary" href="https://adneko.com/operations" target="_blank" rel="noopener">OPERATIONS <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="site-card c-magazine">
+    <span class="mono">M</span>
+    <span class="tag">Contenido</span>
+    <h2>Magazine Regional del Sur</h2>
+    <p>Contenido, comunidad y desarrollo regional.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://magazinedelsur.adneko.com/" target="_blank" rel="noopener">ENTRAR <span class="arrow">→</span></a>
+    </div>
+  </div>
+
+  <div class="site-card c-adka">
+    <span class="mono">D</span>
+    <span class="tag">Producto</span>
+    <h2>ADKA Soluciones Digitales</h2>
+    <p>Soluciones digitales del ecosistema ADNEKO.</p>
+    <div class="card-links">
+      <a class="link-btn primary" href="https://adkasolucionesdigitales.adneko.com/" target="_blank" rel="noopener">ENTRAR <span class="arrow">→</span></a>
+    </div>
+  </div>
+</main>
+
+<footer>© <span id="year"></span> ADNEKO · Costa Rica</footer>
+
+<script>document.getElementById('year').textContent = new Date().getFullYear();</script>
+</body>
+</html>
